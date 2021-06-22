@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install: 
-  - docker build -t akshay174285/react-test -f /client/Dockerfile.dev ./client
+  - docker build -t akshay174285/react-test -f ./client/Dockerfile.dev ./client
 
 
 script:
@@ -13,5 +13,12 @@ script:
 after_success:
   - docker build -t akshay174285/multi-client -f ./client
   - docker build -t akshay174285/multi-nginx -f ./ngnix
-  - docker build -t akshay174285/multi-services -f ./server
+  - docker build -t akshay174285/multi-server -f ./server
   - docker build -t akshay174285/multi-worker -f ./worker
+# first login to the docker hub
+# take those images and push them in docker hub 
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push akshay174285/multi-client
+  - docker push akshay174285/multi-nginx
+  - docker push akshay174285/multi-server
+  - docker push akshay174285/multi-worker
